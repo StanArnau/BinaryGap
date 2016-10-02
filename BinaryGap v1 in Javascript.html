@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="#">
+
+    <title>BinaryGap</title>
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+</head>
+
+<body style="background: #F7FAFF;">
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Find longest sequence of zeros in binary representation of an integer.</h2>
+                <p>Enter an integer within the range [1..2,147,483,647]</p>
+                <p>
+                    <input type="number" id="inputUser" style="max-width: 80vw; width: 20vw;" placeholder="Enter your number here..." autofocus>
+                </p>
+                <p>
+                    <button id="btnFind" class="btn btn-secondary">Find</button>
+                    <button id="btnReset" class="btn btn-secondary">Reset</button>
+                </p>
+                <h3>The longest sequence of zeros is: <span id="resultDisplay"></span>
+                </h3>
+            </div>
+        </div>
+
+        <script>
+
+             // event listeners
+            document.getElementById("btnFind").addEventListener("click", getNumberFromUser);
+            document.getElementById("btnReset").addEventListener("click", resetNumber);
+            document.getElementById("inputUser").addEventListener("click", resetNumber);
+
+
+             // initiate control
+            document.getElementById("inputUser").focus;
+
+            function getNumberFromUser() {
+                var userInput = document.getElementById("inputUser").value;
+                convertIntToString(userInput);
+            }
+
+            function convertIntToString(inputString) {
+                var inputInteger = parseInt(inputString, 10); // convert string to integer base 10
+                var binString = inputInteger.toString(2); // convert number to string with base 2  
+                document.getElementById("inputUser").value = binString; //replace integer num with binary at input
+                findZeroSequence(binString);
+            }
+
+            function findZeroSequence(currSeq) { // find the indexes of the "10" and "01" sequence until all found
+                var longestSeqLength = 0;
+                var startSeqPos = 0;
+                var endSeqPos = 0;
+
+                while (currSeq.length > 2) { // continue search as long as sequence is longer than 2 char
+                    startSeqPos = currSeq.indexOf("10");
+                    endSeqPos = currSeq.indexOf("01");
+
+                    if ((startSeqPos < endSeqPos) && (startSeqPos != -1) && (endSeqPos != -1)) {
+                        //calculate length of the found currSeq
+                        var currSeqLength = endSeqPos - startSeqPos;
+
+                        //alert("the seq length is: " + seqLength);
+                        if (currSeqLength > longestSeqLength) {
+                            longestSeqLength = currSeqLength;
+                            var longestSeq = currSeq;
+                        }
+
+                        // remove checked portion of string
+                        currSeq = currSeq.substr(endSeqPos + 1);
+
+                    } else {
+                        break;
+                    }
+                }
+
+                if (typeof longestSeq == 'undefined')
+                    document.getElementById("resultDisplay").innerHTML = "not found";
+                else {
+                    startSeqPos = longestSeq.indexOf("10");
+                    endSeqPos = longestSeq.indexOf("01");
+                    longestSeq = longestSeq.substring(startSeqPos, endSeqPos + 2);
+                    displayResult(longestSeqLength, longestSeq);
+                }
+
+            }
+
+            function displayResult(seqLength, seqLocal) {
+                document.getElementById("resultDisplay").innerHTML = seqLength + " - " + seqLocal;
+            }
+
+            function resetNumber() {
+                location.reload();
+            }
+        </script>
+
+        <hr>
+
+        <footer>
+            <p>&copy; Powered by ParadigmOz.com 2016</p>
+        </footer>
+    </div>
+
+</body>
+
+</html>
